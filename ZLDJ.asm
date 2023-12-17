@@ -1,0 +1,50 @@
+        ORG 0000H
+        AJMP START
+	ORG 0030H
+ START: MOV SP,#60H
+        MOV R7,#00H
+        MOV R6,#0FH
+HA14S:	MOV 30H,#10H
+        MOV 31H,#01H
+        MOV DPTR,#8000H
+HA14S1:	MOV A,#0FFH
+        MOVX @DPTR,A
+        MOV R2,30h
+	LCALL DELAY
+        MOV A,#00H
+	MOVX @DPTR,A
+        MOV R2,31H
+        LCALL DELAY
+        DJNZ R7,HA14S1
+        MOV R7,#00H
+        DEC 30H
+        INC 31H
+        DJNZ R6,HA14S1
+        MOV 30H,#01H
+        MOV 31H,#10H
+        MOV R6,#10H
+HA14S2:	MOV A,#0FFH
+        MOVX @DPTR,A
+        MOV R2,30h
+	LCALL DELAY
+        MOV A,#00H
+	MOVX @DPTR,A
+        MOV R2,31H
+        LCALL DELAY
+        DJNZ R7,HA14S2
+        MOV R7,#00H
+        INC 30H
+        DEC 31H
+        DJNZ R6,HA14S2
+        NOP
+        SJMP START
+ DELAY:	PUSH 02H
+DELAY1:  PUSH 02H
+DELAY2:  DJNZ R2,DELAY2
+	POP 02H
+	DJNZ R2,DELAY1
+	POP 02H
+	DJNZ R2,DELAY
+	RET
+
+	END
